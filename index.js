@@ -91,6 +91,12 @@ async function run() {
         const result = await myCollection.find(query).toArray()
         res.send(result)
     })
+    app.delete('/mybooking/:id', async(req,res) => {
+       const id = req.params.id
+       const query = {_id : new ObjectId(id)}
+       const result = await myCollection.deleteOne(query)
+       res.send(result)
+    })
 
     // all rooms data part 
     app.get('/rooms', async(req,res) => {
