@@ -91,6 +91,12 @@ async function run() {
         const result = await myCollection.find(query).toArray()
         res.send(result)
     })
+    app.get('/mybooking/:id', async(req,res) => {
+      const id = req.params.id
+      const query = {_id : new ObjectId(id) }
+      const result = await myCollection.findOne(query)
+      res.send(result)
+    })
     app.delete('/mybooking/:id', async(req,res) => {
        const id = req.params.id
        const query = {_id : new ObjectId(id)}
@@ -98,6 +104,14 @@ async function run() {
        res.send(result)
     })
 
+    app.put('/mybooking/:id', async(req,res) => {
+      const id = req.params.id
+      const filter = {_id : new ObjectId(id)}
+      const updateDate = req.body
+      const finalUpdate = {$set :  updateDate.bookingTime}
+      const result = await myCollection.updateOne(filter,finalUpdate)
+      res.send(result)
+    })
     // all rooms data part 
     app.get('/rooms', async(req,res) => {
         const result = await roomsCollection.find().toArray()
