@@ -52,13 +52,33 @@ async function run() {
     await client.connect();
     const roomsCollection = client.db('hotelDB').collection('rooms')
     const myCollection = client.db('hotelDB').collection('mybooking')
+
+    // Token post 
+    app.post('/jwt', async(req,res) => {
+      const user = req.body
+      const token = jwt.sign(user, process.env.SECRET, {expiresIn : '1hr'})
+      res
+      .cookie('token', token, {
+        httpOnly : true,
+        secure : true,
+        sameSite : 'none'
+      })
+      .send({success : true})
+    })
+    app.post('/logout', async(req,res) => {
+      const user = req.body
+      console.log('logged user', user);
+      res
+      .clearCookie('token', {maxAge : 0})
+      .send({success : true})
+    })
     // My Booking Now part 
     app.post('/mybooking', async(req,res) => {
         const query = req.body
         const result = await myCollection.insertOne(query)
         res.send(result)
     })
-    app.get('/mybooking', async(req,res) => {
+    app.get('/mybooking', logger, verifyToken, async(req,res) => {
       console.log(req.query.email);
       console.log('tooken owner info', req.user);
       if(req.user.email !== req.user.email){
