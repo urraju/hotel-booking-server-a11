@@ -17,7 +17,7 @@ app.use(cookieParser())
 
 // token genarate part 
 const logger = (req,res, next) => {
-  console.log(req.method, req,url);
+  console.log(req.method, req.url);
   next()
 }
 // verify token part 
@@ -86,7 +86,7 @@ async function run() {
       }
       let query = {}
       if(req.query?.email){
-        query = {email : req.query.email}
+        query = {userEmail : req.query.email}
       }
         const result = await myCollection.find(query).toArray()
         res.send(result)
