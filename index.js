@@ -53,6 +53,7 @@ async function run() {
     const roomsCollection = client.db('hotelDB').collection('rooms')
     const myCollection = client.db('hotelDB').collection('mybooking')
     const reviewCollection = client.db('hotelDB').collection('review')
+    const featureCollection = client.db('hotelDB').collection('featurerRoom')
 
     // Token post 
     app.post('/jwt', async(req,res) => {
@@ -74,6 +75,12 @@ async function run() {
       .send({success : true})
     })
 
+    // Features Room part 
+    app.get('/featurerRoom', async(req,res) => {
+      const result = await featureCollection.find().toArray()
+      res.send(result)
+    })
+    
     // review post get data part
     app.post('/review', async(req,res) => {
       const query = req.body
