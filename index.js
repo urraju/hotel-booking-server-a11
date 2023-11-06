@@ -52,6 +52,7 @@ async function run() {
     await client.connect();
     const roomsCollection = client.db('hotelDB').collection('rooms')
     const myCollection = client.db('hotelDB').collection('mybooking')
+    const reviewCollection = client.db('hotelDB').collection('review')
 
     // Token post 
     app.post('/jwt', async(req,res) => {
@@ -72,6 +73,19 @@ async function run() {
       .clearCookie('token', {maxAge : 0})
       .send({success : true})
     })
+
+    // review post get data part
+    app.post('/review', async(req,res) => {
+      const query = req.body
+      const result = await reviewCollection.insertOne(query)
+      res.send(result)
+    })
+    app.get('/review', async(req,res) => {
+        const result = await reviewCollection.find().toArray()
+        res.send(result)
+    })
+
+
     // My Booking Now part 
     app.post('/mybooking', async(req,res) => {
         const query = req.body
@@ -92,6 +106,9 @@ async function run() {
         res.send(result)
     })
     app.get('/mybooking/:id', async(req,res) => {
+      // if(req.user.email !== req.user.email){
+      //   return res.status(403).send({message : 'Foorbiden'})
+      // }
       const id = req.params.id
       const query = {_id : new ObjectId(id) }
       const result = await myCollection.findOne(query)
@@ -108,7 +125,9 @@ async function run() {
       const id = req.params.id
       const filter = {_id : new ObjectId(id)}
       const updateDate = req.body
-      const finalUpdate = {$set :  updateDate.bookingTime}
+      const finalUpdate = {$set : 
+        {bookingTime : updateDate.time}
+       }
       const result = await myCollection.updateOne(filter,finalUpdate)
       res.send(result)
     })
