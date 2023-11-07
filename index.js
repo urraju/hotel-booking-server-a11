@@ -54,6 +54,7 @@ async function run() {
     const myCollection = client.db('hotelDB').collection('mybooking')
     const reviewCollection = client.db('hotelDB').collection('review')
     const featureCollection = client.db('hotelDB').collection('featurerRoom')
+    const testimonialCollection = client.db('hotelDB').collection('testimonial')
 
     // Token post 
     app.post('/jwt', async(req,res) => {
@@ -73,6 +74,13 @@ async function run() {
       res
       .clearCookie('token', {maxAge : 0})
       .send({success : true})
+    })
+
+    // testimonial part 
+
+    app.get('/testimonial', async(req,res) => {
+      const result = await testimonialCollection.find().toArray()
+      res.send(result)
     })
 
     // Features Room part 
