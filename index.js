@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 
 app.use(cors({
-  origin : ['assignmant-11.web.app','assignmant-11.firebaseapp.com'],
+  origin : ['https://assignmant-11.web.app','htts://assignmant-11.firebaseapp.com','http://localhost:5174'],
   credentials : true
 }))
 app.use(express.json())
@@ -49,7 +49,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // await client.connect();
+     
     const roomsCollection = client.db('hotelDB').collection('rooms')
     const myCollection = client.db('hotelDB').collection('mybooking')
     const reviewCollection = client.db('hotelDB').collection('review')
@@ -62,7 +62,7 @@ async function run() {
       const filter = {
           _id: new ObjectId(id)
       }
-      // const updateSeat = req.body
+       
      
       const pathData = {
           $inc: {
@@ -177,7 +177,7 @@ async function run() {
 
    
     
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
   }
